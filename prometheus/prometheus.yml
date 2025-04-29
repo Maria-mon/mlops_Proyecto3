@@ -1,0 +1,25 @@
+# Prometheus configuration file
+# Colócalo en ./prometheus/prometheus.yml
+
+global:
+  scrape_interval: 15s        # Intervalo de raspeo de métricas
+  evaluation_interval: 15s    # Evaluación de reglas (si se usan)
+
+scrape_configs:
+  # Raspeo de métricas de la API de inferencia
+  - job_name: 'inference'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['inference:8000']
+
+  # Prometheus se raspeará a sí mismo para su estado
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+
+
+
+
+
+
