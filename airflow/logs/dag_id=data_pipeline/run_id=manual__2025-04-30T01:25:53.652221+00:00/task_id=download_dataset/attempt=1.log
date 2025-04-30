@@ -1,0 +1,14 @@
+[2025-04-30T01:25:56.585+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: data_pipeline.download_dataset manual__2025-04-30T01:25:53.652221+00:00 [queued]>
+[2025-04-30T01:25:56.612+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: data_pipeline.download_dataset manual__2025-04-30T01:25:53.652221+00:00 [queued]>
+[2025-04-30T01:25:56.613+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 2
+[2025-04-30T01:25:56.660+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): download_dataset> on 2025-04-30 01:25:53.652221+00:00
+[2025-04-30T01:25:56.678+0000] {standard_task_runner.py:60} INFO - Started process 183 to run task
+[2025-04-30T01:25:56.700+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'data_pipeline', 'download_dataset', 'manual__2025-04-30T01:25:53.652221+00:00', '--job-id', '13', '--raw', '--subdir', 'DAGS_FOLDER/data_pipeline_dag.py', '--cfg-path', '/tmp/tmpedqu834e']
+[2025-04-30T01:25:56.705+0000] {standard_task_runner.py:88} INFO - Job 13: Subtask download_dataset
+[2025-04-30T01:25:56.756+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.8/site-packages/***/settings.py:194 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2025-04-30T01:25:56.880+0000] {task_command.py:423} INFO - Running <TaskInstance: data_pipeline.download_dataset manual__2025-04-30T01:25:53.652221+00:00 [running]> on host c2c1458d457a
+[2025-04-30T01:25:57.106+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='data_pipeline' AIRFLOW_CTX_TASK_ID='download_dataset' AIRFLOW_CTX_EXECUTION_DATE='2025-04-30T01:25:53.652221+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-04-30T01:25:53.652221+00:00'
+[2025-04-30T01:26:02.576+0000] {python.py:201} INFO - Done. Returned value was: None
+[2025-04-30T01:26:02.636+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=data_pipeline, task_id=download_dataset, execution_date=20250430T012553, start_date=20250430T012556, end_date=20250430T012602
+[2025-04-30T01:26:02.760+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2025-04-30T01:26:02.852+0000] {taskinstance.py:3280} INFO - 1 downstream tasks scheduled from follow-on schedule check

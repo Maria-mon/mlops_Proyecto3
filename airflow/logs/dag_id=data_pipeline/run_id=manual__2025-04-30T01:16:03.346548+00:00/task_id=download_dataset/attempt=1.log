@@ -1,0 +1,27 @@
+[2025-04-30T01:16:06.110+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: data_pipeline.download_dataset manual__2025-04-30T01:16:03.346548+00:00 [queued]>
+[2025-04-30T01:16:06.139+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: data_pipeline.download_dataset manual__2025-04-30T01:16:03.346548+00:00 [queued]>
+[2025-04-30T01:16:06.140+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 2
+[2025-04-30T01:16:06.198+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): download_dataset> on 2025-04-30 01:16:03.346548+00:00
+[2025-04-30T01:16:06.227+0000] {standard_task_runner.py:60} INFO - Started process 180 to run task
+[2025-04-30T01:16:06.247+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'data_pipeline', 'download_dataset', 'manual__2025-04-30T01:16:03.346548+00:00', '--job-id', '9', '--raw', '--subdir', 'DAGS_FOLDER/data_pipeline_dag.py', '--cfg-path', '/tmp/tmp98xegdh_']
+[2025-04-30T01:16:06.254+0000] {standard_task_runner.py:88} INFO - Job 9: Subtask download_dataset
+[2025-04-30T01:16:06.339+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.8/site-packages/***/settings.py:194 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2025-04-30T01:16:06.481+0000] {task_command.py:423} INFO - Running <TaskInstance: data_pipeline.download_dataset manual__2025-04-30T01:16:03.346548+00:00 [running]> on host c2c1458d457a
+[2025-04-30T01:16:06.744+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='data_pipeline' AIRFLOW_CTX_TASK_ID='download_dataset' AIRFLOW_CTX_EXECUTION_DATE='2025-04-30T01:16:03.346548+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-04-30T01:16:03.346548+00:00'
+[2025-04-30T01:16:06.751+0000] {taskinstance.py:2698} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/taskinstance.py", line 433, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 199, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 216, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/data_pipeline_dag.py", line 11, in download_dataset
+    os.makedirs(data_root, exist_ok=True)
+  File "/usr/local/lib/python3.8/os.py", line 223, in makedirs
+    mkdir(name, mode)
+PermissionError: [Errno 13] Permission denied: '/opt/airflow/datasets/Diabetes'
+[2025-04-30T01:16:06.779+0000] {taskinstance.py:1138} INFO - Marking task as UP_FOR_RETRY. dag_id=data_pipeline, task_id=download_dataset, execution_date=20250430T011603, start_date=20250430T011606, end_date=20250430T011606
+[2025-04-30T01:16:06.804+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 9 for task download_dataset ([Errno 13] Permission denied: '/opt/airflow/datasets/Diabetes'; 180)
+[2025-04-30T01:16:06.867+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2025-04-30T01:16:06.915+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

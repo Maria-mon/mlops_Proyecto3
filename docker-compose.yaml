@@ -28,6 +28,7 @@ services:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW_CONN_POSTGRES_DEFAULT=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
       - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
       - MLFLOW_S3_ENDPOINT_URL=${MLFLOW_S3_ENDPOINT_URL}
@@ -54,6 +55,7 @@ services:
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      - AIRFLOW_CONN_POSTGRES_DEFAULT=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
       - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
       - MLFLOW_S3_ENDPOINT_URL=${MLFLOW_S3_ENDPOINT_URL}
