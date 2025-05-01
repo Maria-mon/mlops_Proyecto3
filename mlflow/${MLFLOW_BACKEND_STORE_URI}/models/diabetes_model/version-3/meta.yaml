@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1746115869232
+current_stage: None
+description: ''
+last_updated_timestamp: 1746115869232
+name: diabetes_model
+run_id: 53450ff5a6794383baa111601317633b
+run_link: ''
+source: s3://mlflow-artifacts/diabetes_readmission/53450ff5a6794383baa111601317633b/artifacts/model
+status: READY
+status_message: null
+storage_location: s3://mlflow-artifacts/diabetes_readmission/53450ff5a6794383baa111601317633b/artifacts/model
+user_id: null
+version: 3

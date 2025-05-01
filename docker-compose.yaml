@@ -29,9 +29,13 @@ services:
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
       - AIRFLOW_CONN_POSTGRES_DEFAULT=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      - AIRFLOW_CONN_MLFLOW_DEFAULT=http://mlflow:5000
+      - MLFLOW_TRACKING_URI=http://mlflow:5000        
+      - MLFLOW_S3_BUCKET=mlflow-artifacts
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
       - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
       - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
-      - MLFLOW_S3_ENDPOINT_URL=${MLFLOW_S3_ENDPOINT_URL}
+   
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
@@ -42,6 +46,7 @@ services:
     depends_on:
       - postgres
       - minio
+      - mlflow
     networks:
       - mlops_network
     command: ["airflow","webserver"]
@@ -56,9 +61,13 @@ services:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       - AIRFLOW_CONN_POSTGRES_DEFAULT=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      - AIRFLOW_CONN_MLFLOW_DEFAULT=http://mlflow:5000
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - MLFLOW_S3_BUCKET=mlflow-artifacts
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
       - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
       - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
-      - MLFLOW_S3_ENDPOINT_URL=${MLFLOW_S3_ENDPOINT_URL}
+      
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
@@ -67,6 +76,8 @@ services:
     depends_on:
       - postgres
       - minio
+      - mlflow
+      
     networks:
       - mlops_network
     command: ["airflow","scheduler"]
@@ -115,7 +126,7 @@ services:
     environment:
       - MLFLOW_TRACKING_URI=http://mlflow:5000
       - MLFLOW_BACKEND_STORE_URI=mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
-      - MLFLOW_DEFAULT_ARTIFACT_ROOT=s3://mlflow
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=s3://mlflow-artifacts
       - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
       - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
       - MLFLOW_S3_ENDPOINT_URL=${MLFLOW_S3_ENDPOINT_URL}
@@ -145,10 +156,13 @@ services:
       - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
       - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
       - MLFLOW_S3_ENDPOINT_URL=${MLFLOW_S3_ENDPOINT_URL}
+      - MODEL_NAME=diabetes_model
     ports:
       - "8000:8000"
     depends_on:
       - mlflow
+      - minio
+      - mysql
     networks:
       - mlops_network
     command: uvicorn main:app --host 0.0.0.0 --port 8000
@@ -159,6 +173,8 @@ services:
     image: custom-ui:latest
     container_name: ui
     env_file: .env
+    environment:
+    - API_URL=http://inference:8000/predict
     ports:
       - "8503:8503"
     depends_on:

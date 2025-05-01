@@ -1,0 +1,15 @@
+artifact_uri: s3://mlflow-artifacts/diabetes_readmission/422ad55672b3455386e2a518f8927af2/artifacts
+end_time: 1746115888987
+entry_point_name: ''
+experiment_id: '225220923780667378'
+lifecycle_stage: active
+run_id: 422ad55672b3455386e2a518f8927af2
+run_name: LogisticRegression
+run_uuid: 422ad55672b3455386e2a518f8927af2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746115878996
+status: 3
+tags: []
+user_id: airflow

@@ -7,6 +7,6 @@ boto3
 fastapi
 uvicorn
 pandas
-
+prometheus-client
 
 

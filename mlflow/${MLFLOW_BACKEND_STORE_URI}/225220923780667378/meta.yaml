@@ -1,0 +1,6 @@
+artifact_location: s3://mlflow-artifacts/diabetes_readmission
+creation_time: 1746111706059
+experiment_id: '225220923780667378'
+last_update_time: 1746111706059
+lifecycle_stage: active
+name: diabetes_readmission

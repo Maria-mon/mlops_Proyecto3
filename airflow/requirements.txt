@@ -3,4 +3,5 @@ pandas
 scikit-learn
 mlflow
 boto3
-
+numpy
+psycopg2-binary

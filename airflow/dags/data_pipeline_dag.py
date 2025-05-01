@@ -6,6 +6,7 @@ import os
 import requests
 import pandas as pd
 
+
 def download_dataset(**kwargs):
     data_root = '/opt/airflow/datasets/Diabetes'
     os.makedirs(data_root, exist_ok=True)
@@ -37,12 +38,29 @@ def transform_to_clean(**kwargs):
     hook = PostgresHook(postgres_conn_id='postgres_default')
     engine = hook.get_sqlalchemy_engine()
     df = pd.read_sql('SELECT * FROM raw_data', engine)
-    df_clean = df.drop_duplicates()
-    # Ejemplo de ingeniería de características:
-    # df_clean['age_group'] = pd.cut(df_clean['age'], bins=[0,30,60,120], labels=['young','adult','senior'])
-    df_clean.to_sql('clean_data', engine, if_exists='replace', index=False)
 
-# Parámetros por defecto para las tareas
+    # 1) Drop duplicates and critical nulls
+    df = df.drop_duplicates().dropna(subset=['race', 'gender', 'age'])
+
+    # 2) Select only a manageable set of features
+    keep_columns = [
+        'encounter_id', 'patient_nbr',
+        'admission_type_id', 'discharge_disposition_id', 'admission_source_id',
+        'time_in_hospital', 'num_lab_procedures', 'num_procedures', 'num_medications',
+        'number_outpatient', 'number_emergency', 'number_inpatient', 'number_diagnoses',
+        'race', 'gender', 'age', 'readmitted'
+    ]
+    df = df[keep_columns]
+
+    # 3) One-hot encode key categorical columns
+    cat_cols = ['race', 'gender', 'age']
+    df = pd.get_dummies(df, columns=cat_cols, drop_first=True)
+
+    # 4) Write to clean_data table
+    df.to_sql('clean_data', engine, if_exists='replace', index=False)
+
+
+# Default task arguments
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
@@ -77,8 +95,9 @@ with DAG(
         python_callable=transform_to_clean
     )
 
-    # Definición de dependencias
-download_task >> extract_task >> transform_task
+    download_task >> extract_task >> transform_task
+
+
 
 
 

@@ -1,0 +1,16 @@
+[2025-05-01T14:29:44.847+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: data_pipeline.transform_to_clean manual__2025-05-01T14:28:50.342572+00:00 [queued]>
+[2025-05-01T14:29:44.877+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: data_pipeline.transform_to_clean manual__2025-05-01T14:28:50.342572+00:00 [queued]>
+[2025-05-01T14:29:44.878+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 2
+[2025-05-01T14:29:44.936+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): transform_to_clean> on 2025-05-01 14:28:50.342572+00:00
+[2025-05-01T14:29:44.959+0000] {standard_task_runner.py:60} INFO - Started process 207 to run task
+[2025-05-01T14:29:44.976+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'data_pipeline', 'transform_to_clean', 'manual__2025-05-01T14:28:50.342572+00:00', '--job-id', '53', '--raw', '--subdir', 'DAGS_FOLDER/data_pipeline_dag.py', '--cfg-path', '/tmp/tmp11t97z1i']
+[2025-05-01T14:29:44.983+0000] {standard_task_runner.py:88} INFO - Job 53: Subtask transform_to_clean
+[2025-05-01T14:29:45.028+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.8/site-packages/***/settings.py:194 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2025-05-01T14:29:45.141+0000] {task_command.py:423} INFO - Running <TaskInstance: data_pipeline.transform_to_clean manual__2025-05-01T14:28:50.342572+00:00 [running]> on host f4e64b717c7c
+[2025-05-01T14:29:45.428+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='data_pipeline' AIRFLOW_CTX_TASK_ID='transform_to_clean' AIRFLOW_CTX_EXECUTION_DATE='2025-05-01T14:28:50.342572+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-05-01T14:28:50.342572+00:00'
+[2025-05-01T14:29:45.437+0000] {crypto.py:82} WARNING - empty cryptography key - values will not be stored encrypted.
+[2025-05-01T14:29:45.437+0000] {base.py:83} INFO - Using connection ID 'postgres_default' for task execution.
+[2025-05-01T14:30:18.928+0000] {python.py:201} INFO - Done. Returned value was: None
+[2025-05-01T14:30:18.972+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=data_pipeline, task_id=transform_to_clean, execution_date=20250501T142850, start_date=20250501T142944, end_date=20250501T143018
+[2025-05-01T14:30:19.189+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2025-05-01T14:30:19.247+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check
