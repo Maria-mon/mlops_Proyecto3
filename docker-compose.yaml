@@ -213,20 +213,6 @@ services:
       - mlops_network
     restart: always
 
-  locust:
-    image: locustio/locust
-    container_name: locust
-    volumes:
-      - ./locust:/mnt/locust
-    ports:
-      - "8089:8089"
-    depends_on:
-      - inference
-    networks:
-      - mlops_network
-    command: locust -f /mnt/locust/locustfile.py --host=http://inference:8000
-    restart: always
-
   jupyterlab:
     image: jupyter/base-notebook:latest
     container_name: jupyterlab
@@ -247,6 +233,7 @@ volumes:
   postgres:
   minio:
   mysql:
+  grafana:
 
 
 

@@ -1,0 +1,39 @@
+[2025-05-02T00:01:07.204+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: training_and_selection.train_logistic_regression scheduled__2025-05-01T00:00:00+00:00 [queued]>
+[2025-05-02T00:01:07.228+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: training_and_selection.train_logistic_regression scheduled__2025-05-01T00:00:00+00:00 [queued]>
+[2025-05-02T00:01:07.230+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 2
+[2025-05-02T00:01:07.456+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): train_logistic_regression> on 2025-05-01 00:00:00+00:00
+[2025-05-02T00:01:07.495+0000] {standard_task_runner.py:60} INFO - Started process 12504 to run task
+[2025-05-02T00:01:07.510+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'training_and_selection', 'train_logistic_regression', 'scheduled__2025-05-01T00:00:00+00:00', '--job-id', '88', '--raw', '--subdir', 'DAGS_FOLDER/training_pipeline_dag.py', '--cfg-path', '/tmp/tmpy3zsbaaj']
+[2025-05-02T00:01:07.513+0000] {standard_task_runner.py:88} INFO - Job 88: Subtask train_logistic_regression
+[2025-05-02T00:01:07.564+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.8/site-packages/***/settings.py:194 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2025-05-02T00:01:07.658+0000] {task_command.py:423} INFO - Running <TaskInstance: training_and_selection.train_logistic_regression scheduled__2025-05-01T00:00:00+00:00 [running]> on host 3f9fdd6459c9
+[2025-05-02T00:01:07.900+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='training_and_selection' AIRFLOW_CTX_TASK_ID='train_logistic_regression' AIRFLOW_CTX_EXECUTION_DATE='2025-05-01T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-05-01T00:00:00+00:00'
+[2025-05-02T00:01:07.911+0000] {crypto.py:82} WARNING - empty cryptography key - values will not be stored encrypted.
+[2025-05-02T00:01:07.911+0000] {base.py:83} INFO - Using connection ID 'postgres_default' for task execution.
+[2025-05-02T00:01:14.970+0000] {logging_mixin.py:188} WARNING - 2025/05/02 00:01:14 WARNING mlflow.utils.git_utils: Failed to import Git (the Git executable is probably not on your PATH), so Git SHA is not available. Error: Failed to initialize: Bad git executable.
+The git executable must be specified in one of the following ways:
+    - be included in your $PATH
+    - be set via $GIT_PYTHON_GIT_EXECUTABLE
+    - explicitly set via git.refresh(<full-path-to-git-executable>)
+
+All git commands will error until this is rectified.
+
+This initial message can be silenced or aggravated in the future by setting the
+$GIT_PYTHON_REFRESH environment variable. Use one of the following values:
+    - quiet|q|silence|s|silent|none|n|0: for no message or exception
+    - warn|w|warning|log|l|1: for a warning message (logging level CRITICAL, displayed by default)
+    - error|e|exception|raise|r|2: for a raised exception
+
+Example:
+    export GIT_PYTHON_REFRESH=quiet
+[2025-05-02T00:01:21.232+0000] {logging_mixin.py:188} WARNING - 2025/05/02 00:01:21 WARNING mlflow.models.model: Model logged without a signature and input example. Please set `input_example` parameter when logging the model to auto infer the model signature.
+[2025-05-02T00:01:21.524+0000] {credentials.py:1147} INFO - Found credentials in environment variables.
+[2025-05-02T00:01:21.921+0000] {logging_mixin.py:188} WARNING - Registered model 'diabetes_model' already exists. Creating a new version of this model...
+[2025-05-02T00:01:22.020+0000] {logging_mixin.py:188} WARNING - 2025/05/02 00:01:22 INFO mlflow.store.model_registry.abstract_store: Waiting up to 300 seconds for model version to finish creation. Model name: diabetes_model, version 10
+[2025-05-02T00:01:22.021+0000] {logging_mixin.py:188} WARNING - Created version '10' of model 'diabetes_model'.
+[2025-05-02T00:01:22.049+0000] {logging_mixin.py:188} WARNING - 2025/05/02 00:01:22 INFO mlflow.tracking._tracking_service.client: 🏃 View run LogisticRegression at: http://mlflow:5000/#/experiments/225220923780667378/runs/57edabd842ef4cc993c6e57034ae786d.
+[2025-05-02T00:01:22.049+0000] {logging_mixin.py:188} WARNING - 2025/05/02 00:01:22 INFO mlflow.tracking._tracking_service.client: 🧪 View experiment at: http://mlflow:5000/#/experiments/225220923780667378.
+[2025-05-02T00:01:22.062+0000] {python.py:201} INFO - Done. Returned value was: None
+[2025-05-02T00:01:22.087+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=training_and_selection, task_id=train_logistic_regression, execution_date=20250501T000000, start_date=20250502T000107, end_date=20250502T000122
+[2025-05-02T00:01:22.215+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2025-05-02T00:01:22.269+0000] {taskinstance.py:3280} INFO - 1 downstream tasks scheduled from follow-on schedule check

@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  locust:
+    build:
+      context: ./locust
+      dockerfile: Dockerfile
+    container_name: locust
+    volumes:
+      - /home/mlops_Proyecto3/locust:/mnt/locust
+    working_dir: /mnt/locust
+    command: >
+      locust -f locustfile.py 
+      --host http://inference:8000
+    ports:
+      - "8089:8089"
+    networks:
+      - mlops_network
+    cpus: 2
+    mem_limit: 2g
+
+networks:
+  mlops_network:
+    external: true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
