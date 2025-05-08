@@ -136,4 +136,3 @@ t3 = PythonOperator(
 )
 
 t1 >> t2 >> t3
-

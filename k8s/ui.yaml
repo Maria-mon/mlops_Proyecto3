@@ -1,0 +1,42 @@
+# --- DEPLOYMENT inference-ui ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inference-ui
+  namespace: mlops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inference-ui
+  template:
+    metadata:
+      labels:
+        app: inference-ui
+    spec:
+      containers:
+        - name: ui
+          image: mariamon/inference-ui:latest
+          ports:
+            - containerPort: 8503
+          env:
+            - name: API_URL
+              value: http://inference-api.mlops.svc.cluster.local:8000/predict
+          command: ["streamlit", "run", "app.py", "--server.port=8503", "--server.address=0.0.0.0"]
+
+---
+# --- NODEPORT SERVICE inference-ui ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inference-ui
+  namespace: mlops
+spec:
+  type: NodePort
+  selector:
+    app: inference-ui
+  ports:
+    - port: 8503
+      targetPort: 8503
+      nodePort: 30902
+

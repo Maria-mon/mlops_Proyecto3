@@ -1,14 +1,11 @@
-FROM python:3.10-slim
+FROM locustio/locust:2.22.0
 
-# Instala dependencias
-RUN apt-get update && \
-    apt-get install -y curl iputils-ping && \
-    pip install --no-cache-dir locust && \
-    apt-get clean
+# Copia el archivo de pruebas al contenedor
+COPY locustfile.py /locustfile.py
 
-# Crear usuario no root (opcional para seguridad)
-RUN useradd -m locustuser
-USER locustuser
+# Directorio de trabajo dentro del contenedor
+WORKDIR /
 
-WORKDIR /mnt/locust
+# Comando por defecto si no se sobreescribe
+CMD ["locust", "-f", "locustfile.py", "--host=http://inference-api:8000"]
 

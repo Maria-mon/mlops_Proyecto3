@@ -1,0 +1,6 @@
+nohup: ignoring input
+E0507 20:25:51.036674 2784742 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: the server could not find the requested resource"
+E0507 20:25:51.093426 2784742 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: the server could not find the requested resource"
+E0507 20:25:51.126191 2784742 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: the server could not find the requested resource"
+E0507 20:25:51.182497 2784742 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: the server could not find the requested resource"
+Error from server (NotFound): the server could not find the requested resource

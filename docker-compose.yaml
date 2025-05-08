@@ -5,20 +5,6 @@ networks:
     driver: bridge
 
 services:
-  postgres:
-    image: postgres:13
-    container_name: postgres
-    env_file: .env
-    environment:
-      - POSTGRES_USER=airflow
-      - POSTGRES_PASSWORD=airflow
-      - POSTGRES_DB=airflow
-    volumes:
-      - ./postgres:/var/lib/postgresql/data
-    networks:
-      - mlops_network
-    restart: always
-
   airflow-webserver:
     build: ./airflow
     image: custom-airflow:latest
@@ -26,30 +12,26 @@ services:
     env_file: .env
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@10.43.101.187:30432/airflow
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
-      - AIRFLOW_CONN_POSTGRES_DEFAULT=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
-      - AIRFLOW_CONN_MLFLOW_DEFAULT=http://mlflow:5000
-      - MLFLOW_TRACKING_URI=http://mlflow:5000        
+      - AIRFLOW_CONN_POSTGRES_DEFAULT=postgresql+psycopg2://airflow:airflow@10.43.101.187:30432/airflow
+      - AIRFLOW_CONN_MLFLOW_DEFAULT=http://10.43.101.187:30500
+      - MLFLOW_TRACKING_URI=http://10.43.101.187:30500
       - MLFLOW_S3_BUCKET=mlflow-artifacts
-      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
-      - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
-      - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
-   
+      - MLFLOW_S3_ENDPOINT_URL=http://10.43.101.187:30900
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./datasets:/opt/airflow/datasets
       - ./airflow/models:/opt/airflow/models
+
     ports:
       - "8080:8080"
-    depends_on:
-      - postgres
-      - minio
-      - mlflow
     networks:
       - mlops_network
-    command: ["airflow","webserver"]
+    command: ["airflow", "webserver"]
     restart: always
 
   airflow-scheduler:
@@ -59,158 +41,22 @@ services:
     env_file: .env
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
-      - AIRFLOW_CONN_POSTGRES_DEFAULT=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
-      - AIRFLOW_CONN_MLFLOW_DEFAULT=http://mlflow:5000
-      - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@10.43.101.187:30432/airflow
+      - AIRFLOW_CONN_POSTGRES_DEFAULT=postgresql+psycopg2://airflow:airflow@10.43.101.187:30432/airflow
+      - AIRFLOW_CONN_MLFLOW_DEFAULT=http://10.43.101.187:30500
+      - MLFLOW_TRACKING_URI=http://10.43.101.187:30500
       - MLFLOW_S3_BUCKET=mlflow-artifacts
-      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
-      - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
-      - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
-      
+      - MLFLOW_S3_ENDPOINT_URL=http://10.43.101.187:30900
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./datasets:/opt/airflow/datasets
       - ./airflow/models:/opt/airflow/models
-    depends_on:
-      - postgres
-      - minio
-      - mlflow
-      
     networks:
       - mlops_network
-    command: ["airflow","scheduler"]
-    restart: always
-
-  minio:
-    image: minio/minio:latest
-    container_name: minio
-    env_file: .env
-    environment:
-      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
-      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
-    command: server /data --console-address ":9001"
-    volumes:
-      - ./minio:/data
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    networks:
-      - mlops_network
-    restart: always
-
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    command: --default-authentication-plugin=mysql_native_password
-    env_file: .env
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    volumes:
-      - ./mysql:/var/lib/mysql
-    ports:
-      - "3306:3306"
-    networks:
-      - mlops_network
-    restart: always
-
-  mlflow:
-    build: ./mlflow
-    image: custom-mlflow:latest
-    container_name: mlflow
-    env_file: .env
-    environment:
-      - MLFLOW_TRACKING_URI=http://mlflow:5000
-      - MLFLOW_BACKEND_STORE_URI=mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
-      - MLFLOW_DEFAULT_ARTIFACT_ROOT=s3://mlflow-artifacts
-      - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
-      - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
-      - MLFLOW_S3_ENDPOINT_URL=${MLFLOW_S3_ENDPOINT_URL}
-    volumes:
-      - ./mlflow:/mlflow
-    ports:
-      - "5000:5000"
-    depends_on:
-      - mysql
-      - minio
-    networks:
-      - mlops_network
-    command: >
-      mlflow server
-      --backend-store-uri $${MLFLOW_BACKEND_STORE_URI}
-      --default-artifact-root $${MLFLOW_DEFAULT_ARTIFACT_ROOT}
-      --host 0.0.0.0
-    restart: always
-
-  inference:
-    build: ./inference
-    image: custom-inference:latest
-    container_name: inference
-    env_file: .env
-    environment:
-      - MLFLOW_TRACKING_URI=http://mlflow:5000
-      - AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY}
-      - AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY}
-      - MLFLOW_S3_ENDPOINT_URL=${MLFLOW_S3_ENDPOINT_URL}
-      - MODEL_NAME=diabetes_model
-    ports:
-      - "8000:8000"
-    depends_on:
-      - mlflow
-      - minio
-      - mysql
-    networks:
-      - mlops_network
-    command: uvicorn main:app --host 0.0.0.0 --port 8000
-    restart: always
-
-  ui:
-    build: ./ui
-    image: custom-ui:latest
-    container_name: ui
-    env_file: .env
-    environment:
-    - API_URL=http://inference:8000/predict
-    ports:
-      - "8503:8503"
-    depends_on:
-      - inference
-    networks:
-      - mlops_network
-    command: streamlit run app.py --server.port 8503 --server.address 0.0.0.0
-    restart: always
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    ports:
-      - "9090:9090"
-    depends_on:
-      - inference
-    networks:
-      - mlops_network
-    restart: always
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    env_file: .env
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
-    volumes:
-      - ./grafana:/var/lib/grafana
-    ports:
-      - "3000:3000"
-    depends_on:
-      - prometheus
-    networks:
-      - mlops_network
+    command: ["airflow", "scheduler"]
     restart: always
 
   jupyterlab:
@@ -224,19 +70,7 @@ services:
     depends_on:
       - airflow-webserver
       - airflow-scheduler
-      - mlflow
     networks:
       - mlops_network
     restart: always
-
-volumes:
-  postgres:
-  minio:
-  mysql:
-  grafana:
-
-
-
-
-
 

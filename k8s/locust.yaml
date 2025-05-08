@@ -1,0 +1,41 @@
+# --- DEPLOYMENT ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust
+  namespace: mlops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locust
+  template:
+    metadata:
+      labels:
+        app: locust
+    spec:
+      containers:
+        - name: locust
+          image: mariamon/locust:latest
+          args: [
+            "-f", "locustfile.py",
+            "--host", "http://inference-api:8000"
+          ]
+          ports:
+            - containerPort: 8089
+
+---
+# --- NODEPORT SERVICE ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: locust
+  namespace: mlops
+spec:
+  type: NodePort
+  selector:
+    app: locust
+  ports:
+    - port: 8089
+      targetPort: 8089
+      nodePort: 30905

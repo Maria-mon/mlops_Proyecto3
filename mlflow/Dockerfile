@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt ./
 
 # Instalar requerimientos de Python
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt psycopg2-binary
 
 # Exponer el puerto de MLflow
 EXPOSE 5000
